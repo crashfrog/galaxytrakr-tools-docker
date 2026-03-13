@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # A Personal Access Token (PAT) with 'repo' scope is required to push commits back.
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GALAXYTRAKR_PAT }}
           fetch-depth: 0 # Fetch all history for a reliable git diff
 
       # --- 2. Authenticate to Quay.io ---
