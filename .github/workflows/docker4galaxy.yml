@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GALAXTRAKR_PAT }}
+          token: ${{ secrets.GALAXYTRAKR_PAT }}
           fetch-depth: 2 # Fetch last 2 commits for the diff
 
       - name: Authenticate to Quay.io
