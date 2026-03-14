@@ -93,3 +93,7 @@ Thumbs.db
 .github/workflows/tmp/
 .github/actions/tmp/
 
+###############################################
+# CI/CD Temporary Build Directories
+###############################################
+**/source_repo/
