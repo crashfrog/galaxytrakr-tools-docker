@@ -11,6 +11,7 @@ ARG MASH_VER="2.3"
 ARG PYTHON_VER="3.8"
 
 # Avoid interactive prompts during apt-get install.
+
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install all the dependencies needed to build our tools.
