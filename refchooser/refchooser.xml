@@ -1,0 +1,66 @@
+<tool id="refchooser" name="Refchooser" version="0.2.1+galaxy0.1" python_template_version="3.5" profile="21.05">
+    <description>Select centroidal assembly from a collection of closely-related assemblies, for reference purposes</description>
+    <requirements>
+        <container type="docker">cfsanbiostatistics/refchooser:0.2.1</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir ./assemblies &&
+        #for assembly in $assemblies
+            ln -sf '$assembly' ./assemblies/${assembly.element_identifier.replace(": ", ".").replace(" ", "_")}.fasta &&
+        #end for
+        refchooser sketch ./assemblies ./sketches &&
+        refchooser matrix ./assemblies ./sketches ${matrix} &&
+        export BEST=\$(refchooser metrics --sort Mean_Distance --top 1 ./assemblies ./sketches | tail -n 1 | cut -f 1) &&
+        echo "*** best accession \$BEST ***" >&2 &&
+        mkdir output &&
+        cp ./assemblies/\$BEST.fasta output/\$BEST.fasta
+    ]]></command>
+    <inputs>
+        <param type="data_collection" collection_type="list" name="assemblies" format="fasta" />
+    </inputs>
+    <outputs>
+        <data name="matrix" label="Refchooser distance matrix for $on_string" format="tsv" hidden="false" />
+        <data name="best" format="txt" label="Best assembly" visible="false" >
+            <discover_datasets directory="output" pattern="__designation_and_ext__" assign_primary_output="true" visible="true" />
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="assemblies">
+                <collection type="list">
+                    <element name="SRR498285" value="test/reference_selection/assemblies/SRR498285_contigs.fasta" />
+                    <element name="SRR498286" value="test/reference_selection/assemblies/SRR498286_contigs.fasta" />
+                    <element name="SRR498361" value="test/reference_selection/assemblies/SRR498361_contigs.fasta" />
+                    <element name="SRR498363" value="test/reference_selection/assemblies/SRR498363_contigs.fasta" />
+                    <element name="SRR498372" value="test/reference_selection/assemblies/SRR498372_contigs.fasta" />
+                    <element name="SRR498379" value="test/reference_selection/assemblies/SRR498379_contigs.fasta" />
+                    <element name="SRR498381" value="test/reference_selection/assemblies/SRR498381_contigs.fasta" />
+                    <element name="SRR498384" value="test/reference_selection/assemblies/SRR498384_contigs.fasta" />
+                    <element name="SRR498386" value="test/reference_selection/assemblies/SRR498386_contigs.fasta" />
+                    <element name="SRR498387" value="test/reference_selection/assemblies/SRR498387_contigs.fasta" />
+                </collection>
+            </param>
+            <output name="best" >
+                <discovered_dataset designation="SRR498286" ftype="fasta">
+                    <assert_contents>
+                        <has_text text="SRR498286" />
+                    </assert_contents>
+                </discovered_dataset>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+        Some important help text.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+@misc{githubrefchooser,
+  author = {Davis, Steven},
+  year = {2019},
+  title = {Refchooser},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://refchooser.readthedocs.io/en/latest/},
+}</citation>
+    </citations>
+</tool>
