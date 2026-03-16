@@ -38,13 +38,23 @@ jobs:
           CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
           if echo "$CHANGED_FILES" | grep -q "Dockerfile"; then
             echo "Dockerfile change detected. A container rebuild is required."
+            
+            # This is the single, corrected 'sed' command that works.
             DIRS_TO_BUILD=$(echo "$CHANGED_FILES" | grep "Dockerfile" | sed -E 's|^(tools/[^/]+)/.*|\1|' | sort -u)
+            
+            if [ -z "$DIRS_TO_BUILD" ]; then
+                echo "::error::'sed' command failed to extract directory. This should not happen."
+                exit 1
+            fi
+            
             echo "build_required=true" >> $GITHUB_OUTPUT
+            echo "The following directories will be rebuilt: ${DIRS_TO_BUILD}"
             echo "tool_dirs=${DIRS_TO_BUILD}" >> $GITHUB_OUTPUT
           else
-            echo "No Dockerfile changes detected. Container rebuild is NOT required."
+            echo "No Dockerfile changes detected in this commit. Container rebuild is NOT required."
             echo "build_required=false" >> $GITHUB_OUTPUT
           fi
+
           
       # --- Step 5 is now simplified to use the shed.yml version ---
       - name: Build, Push, and Patch
