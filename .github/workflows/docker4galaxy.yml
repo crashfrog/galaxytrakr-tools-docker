@@ -101,13 +101,10 @@ jobs:
               fi
             done
           done
-          
+
       #Make container repositories public after pushing
       - name: Make Container Repository Public
         if: steps.build_logic.outputs.build_required == 'true'
-        env:
-          QUAY_USER: ${{ secrets.QUAY_USER }}
-          QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
         run: |
           set -e
           echo "Making repositories public..."
@@ -119,8 +116,9 @@ jobs:
             echo "Making repository public: quay.io/galaxytrakr/${TOOL_NAME}"
             echo "=================================================="
             
-            curl --user "${QUAY_USER}:${QUAY_PASSWORD}" \
-                 -X PUT "https://quay.io/api/v1/repository/galaxytrakr/${TOOL_NAME}" \
+            # Use the robot account's token as a Bearer Token for authentication
+            curl -X PUT "https://quay.io/api/v1/repository/galaxytrakr/${TOOL_NAME}" \
+                 -H "Authorization: Bearer ${{ secrets.QUAY_PASSWORD }}" \
                  -H "Content-Type: application/json" \
                  -d '{"visibility": "public"}'
           done
