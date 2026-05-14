@@ -1,8 +1,8 @@
-<tool id="seqsero2s" name="SeqSero2S" version="1.1.4+0">
+<tool id="seqsero2s" name="SeqSero2S" version="1.1.4+galaxytrakr">
     <description>Simplified Salmonella serotype prediction</description>
     <requirements>
         <!-- <requirement type="package" version="@VERSION@">seqsero2s</requirement> -->
-        <container type="docker">quay.io/biocontainers/seqsero2s:1.1.4--pyhdfd78af_2</container>
+        <container type="docker">quay.io/galaxytrakr/seqsero2s:1.1.4</container>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
       mkdir ./output;
