@@ -1,0 +1,18 @@
+categories: [Tools]
+description: Simplified salmonella serotype prediction from genome sequencing data
+name: seqsero2s
+owner: jpayne
+exclude:
+ - test-data/
+ - .git/
+ - .gitignore/
+ - .gitmodules/
+ - README.md
+ - tool_test_output.html
+ - tool_test_output.json
+ - .python-version
+ - job_conf_sample.yml
+ - .setup_done
+ - .testing
+ - Makefile
+ - seqsero2.xml
